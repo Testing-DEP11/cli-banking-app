@@ -7,6 +7,7 @@ public class BankingApp {
         final String CLEAR = "\033[H\033[2J";
         final String COLOR_BLUE_BOLD = "\033[34;1m";
         final String COLOR_RED_BOLD = "\033[31;1m";
+        final String COLOR_GREEN_BOLD = "\033[32;1m";
         final String RESET = "\033[0m";
         
         final String DASHBOARD = "💰 Welcome to Smart Banking App"; 
@@ -16,9 +17,9 @@ public class BankingApp {
         final String TRANSFER_MONEY = "Trasnfer Money";
         final String ACCOUNT_BALANCE = "Check Account Balance";
         final String DELETE_ACCOUNT = "Drop Existing Account";
-        final String EXIT = "Exit";
 
         final String ERR_MSG = String.format("\t%s%s%s", COLOR_RED_BOLD,"%S",RESET);
+        final String SUCCESS_MSG = String.format("\t%s%s%s", COLOR_GREEN_BOLD,"%s",RESET);
         
         String screen = DASHBOARD;
 
@@ -49,14 +50,33 @@ public class BankingApp {
                         case 4: screen = TRANSFER_MONEY; break;
                         case 5: screen = ACCOUNT_BALANCE; break;
                         case 6: screen = DELETE_ACCOUNT; break;
-                        case 7: screen = EXIT; break;
+                        case 7: System.out.println(CLEAR); System.exit(0);
                         default: continue;
                     }
                     break;
                 
                 case NEW_ACCOUNT:
 
-                int random = (int)Math.floor(Math.random()*10000);
+                    int random = (int)Math.floor(Math.random()*10000);
+                    System.out.printf("\tID:   SDB-%05d\n",random);
+                    System.out.print("\n\tName: ");
+                    String name = scanner.nextLine();
+
+                    System.out.print("\n\tInitial Deposit: Rs. ");
+                    int initialDepo = scanner.nextInt();
+                    scanner.nextLine();
+                    if(initialDepo<5000) {
+                        System.out.printf(ERR_MSG, "\n\tInitial deposit should be greater than Rs.5000.00\n");
+                        System.out.print("\n\tDo you wish to continue(Y/n)? ");
+                        if(scanner.nextLine().strip().toUpperCase().equals("Y")) continue;
+                        screen = DASHBOARD;
+                        break;
+                    }
+                    System.out.printf(SUCCESS_MSG, String.format("\n\tID:SDB-%05d, %s has been created sucessfully!\n", random, name));
+                    System.out.print("\n\tDo you want to continue(Y/n)? ");
+                    if(scanner.nextLine().strip().toUpperCase().equals("Y")) continue;
+                    screen = DASHBOARD;
+                    break;
                     
 
                 default: System.exit(0);
