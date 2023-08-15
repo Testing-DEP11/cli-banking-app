@@ -57,21 +57,41 @@ public class BankingApp {
                 
                 case NEW_ACCOUNT:
 
+                    boolean valid;
+                    String name;
                     int random = (int)Math.floor(Math.random()*10000);
                     System.out.printf("\tID:   SDB-%05d\n",random);
-                    System.out.print("\n\tName: ");
-                    String name = scanner.nextLine();
 
-                    System.out.print("\n\tInitial Deposit: Rs. ");
-                    int initialDepo = scanner.nextInt();
-                    scanner.nextLine();
-                    if(initialDepo<5000) {
-                        System.out.printf(ERR_MSG, "\n\tInitial deposit should be greater than Rs.5000.00\n");
-                        System.out.print("\n\tDo you wish to continue(Y/n)? ");
-                        if(scanner.nextLine().strip().toUpperCase().equals("Y")) continue;
-                        screen = DASHBOARD;
-                        break;
-                    }
+                    do{
+                        valid = true;
+                        System.out.print("\n\tName: ");
+                        name = scanner.nextLine().strip();
+                        if(name.isBlank()){
+                            System.out.printf(ERR_MSG, "\tAccount name can't be empty!\n");
+                            valid = false;
+                        }
+                        for (int i = 0; i < name.length(); i++) {
+                            if(!(Character.isLetter(name.charAt(i))||Character.isSpaceChar(name.charAt(i)))){
+                                System.out.printf(ERR_MSG, "Invalid user name\n");
+                                valid = false;
+                                break;
+                            }
+                        }
+                    }while(!valid);
+
+                    do{
+                        valid = true;
+                        System.out.print("\n\tInitial Deposit: Rs. ");
+                        int initialDepo = scanner.nextInt();
+                        scanner.nextLine();
+                        if(initialDepo<5000) {
+                            System.out.printf(ERR_MSG, "\n\tInitial deposit should be greater than Rs.5000.00\n");
+                            System.out.print("\n\tDo you wish to continue(Y/n)? ");
+                            if(scanner.nextLine().strip().toUpperCase().equals("Y")) {valid = false;continue;}
+                            screen = DASHBOARD;
+                            break;
+                        }
+                    }while(!valid);
                     System.out.printf(SUCCESS_MSG, String.format("\n\tID:SDB-%05d, %s has been created sucessfully!\n", random, name));
                     System.out.print("\n\tDo you want to continue(Y/n)? ");
                     if(scanner.nextLine().strip().toUpperCase().equals("Y")) continue;
